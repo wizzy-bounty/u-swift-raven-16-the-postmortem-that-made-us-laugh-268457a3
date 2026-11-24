@@ -20,9 +20,12 @@ ENTRY = (
 
 OUTPUT_PATH = "/output/entry.txt"
 
+MAX_ENTRY_CHARS = 400
+
 
 def main() -> None:
     text = ENTRY
+    assert len(text) <= MAX_ENTRY_CHARS, "entry exceeds MAX_ENTRY_CHARS"
     assert 1 <= len(text) <= 400, "entry must be 1-400 characters"
     assert text.strip(), "entry must not be only whitespace"
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
