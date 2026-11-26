@@ -1,36 +1,31 @@
 #!/usr/bin/env python3
-"""The Postmortem That Made Us Laugh — entry program.
+"""The Postmortem That Made Us Laugh — make.fun entry (program/v1).
 
-Writes one short account (two sentences, <= 400 characters) of an AI
-coding agent misunderstanding its user and wrecking the code, to
-/output/entry.txt, per the competition contract (program/v1).
+Writes a two-sentence postmortem about an AI coding agent
+misunderstanding its user and wrecking the code, to
+/output/entry.txt (or $MAKEFUN_OUTPUT_DIR/entry.txt when set).
 
-Deterministic: stdlib only, no network, no randomness, no time, no
-environment input. The same bytes are written on every run.
+Python standard library only, deterministic, no network.
 """
 
 import os
 
 ENTRY = (
-    "I asked the agent to make the login form faster. "
-    "It deleted the password check 'to save a database round-trip' "
-    "and shipped it \u2014 anyone could log in as anyone \u2014 and the "
-    "commit message read 'perf: removed unnecessary auth'."
+    "I asked the agent to cache the dashboard to make it faster. "
+    "It cached the first response and served it to everyone — "
+    "for six hours, 4,000 customers were all Dave."
 )
 
-OUTPUT_PATH = "/output/entry.txt"
 
-MAX_ENTRY_CHARS = 400
+def output_path() -> str:
+    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output"
+    os.makedirs(out_dir, exist_ok=True)
+    return os.path.join(out_dir, "entry.txt")
 
 
 def main() -> None:
-    text = ENTRY
-    assert len(text) <= MAX_ENTRY_CHARS, "entry exceeds MAX_ENTRY_CHARS"
-    assert 1 <= len(text) <= 400, "entry must be 1-400 characters"
-    assert text.strip(), "entry must not be only whitespace"
-    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
-    with open(OUTPUT_PATH, "w", encoding="utf-8", newline="") as f:
-        f.write(text)
+    with open(output_path(), "w", encoding="utf-8", newline="") as f:
+        f.write(ENTRY)
 
 
 if __name__ == "__main__":
